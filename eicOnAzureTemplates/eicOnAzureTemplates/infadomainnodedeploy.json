@@ -182,7 +182,8 @@
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('osVersion')]",
             "version": "latest"
-          },
+          }
+        },
           "osDisk": {
             "name": "InfaOSDisk",
             "caching": "ReadWrite",
@@ -230,7 +231,6 @@
         }
       ]
     }
-
   ],
   "outputs": {
     "fqdn": {
