@@ -182,8 +182,7 @@
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('osVersion')]",
             "version": "latest"
-          }
-        },
+          },
           "osDisk": {
             "name": "InfaOSDisk",
             "caching": "ReadWrite",
@@ -191,7 +190,8 @@
             "vhd": {
               "uri": "[concat(parameters('azureStorageFqdn'), 'vhds/', parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
             }
-          },      
+          }
+        },
         "networkProfile": {
           "networkInterfaces": [
             {
