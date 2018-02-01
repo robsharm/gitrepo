@@ -157,8 +157,8 @@
             "osPlatform": "Linux",
             "imageReference": {
               "publisher": "informatica",
-              "offer": "edc",
-              "sku": "edcvm"
+              "offer": "eic",
+              "sku": "eicvm"
             }
           },
 
@@ -223,8 +223,8 @@
             "osPlatform": "Linux",
             "imageReference": {
               "publisher": "informatica",
-              "offer": "edc",
-              "sku": "edcvm"
+              "offer": "eic",
+              "sku": "eicvm"
             }
           },
 

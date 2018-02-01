@@ -162,11 +162,11 @@
         "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nodeNicName'))]"
       ],
-     /* "plan": {
+      "plan": {
         "name": "[parameters('osVersion')]",
         "publisher": "[parameters('imagePublisher')]",
         "product": "[parameters('imageOffer')]"
-      },*/
+      },
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('informaticaDomainInstanceType')]"
@@ -176,7 +176,7 @@
           "adminUsername": "[parameters('informaticaDomainHostSshUsername')]",
           "adminPassword": "[parameters('informaticaDomainHostSshPassword')]"
         },
-       /* "storageProfile": {
+        "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
@@ -190,26 +190,7 @@
             "vhd": {
               "uri": "[concat(parameters('azureStorageFqdn'), 'vhds/', parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
             }
-          }
-        */
-
-
-        //For Testing - Start - Remove after image being staged
-         "storageProfile": {
-          "osDisk": {
-            "name": "VMDisk",
-            "osType": "linux",
-            "caching": "ReadWrite",
-            "createOption": "FromImage",
-            "image": {
-              "uri": "[parameters('imageOffer')]"
-            },
-            "vhd": {
-              "uri": "[concat('https://eicvmforvhdstorage.blob.core.windows.net/linuxsub/', parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
-            }
-          }
-        },
-        //For Testing - End - Remove after image being staged
+          },      
         "networkProfile": {
           "networkInterfaces": [
             {

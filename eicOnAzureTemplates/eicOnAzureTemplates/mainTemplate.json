@@ -30,7 +30,7 @@
       }
     },
     "informaticaDomainInstanceType": {
-      "defaultValue": "Standard_DS4_v2",
+      "defaultValue": "Standard_D4_v2",
       "type": "String",
       "metadata": {
         "description": "The size of Informatica domain instance."
@@ -212,16 +212,16 @@
     "infaDomainNodeDeployTemplateUri": "[concat(variables('baseUri'), 'infadomainnodedeploy.json')]",
     "informaticaDomainHostSshUsername": "sshuser",
     "informaticaDomainHostSshPassword": "[parameters('informaticaAdministratorPassword')]",
-    "osVersion": "edcvm",
+    "osVersion": "eicvm",
     "imagePublisher": "informatica",
-    "imageOffer": "https://eicvmforvhdstorage.blob.core.windows.net/system/Microsoft.Compute/Images/vhd/infaedcvm-osDisk.c7885dd0-5d13-48df-94b2-d6e55f1b7b33.vhd",
+    "imageOffer": "eic-preview",
 
 
     "informaticaNetworkSecurityGroupName": "[toLower(concat('infansg', uniqueString(resourceGroup().id)))]",
     "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
 
     "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
-    "sqlServerName": "[toLower(concat('sqlserver57', uniqueString(resourceGroup().id)))]",
+    "sqlServerName": "[toLower(concat('sqlserver', uniqueString(resourceGroup().id)))]",
     "mrsDbName": "mrs",
     "disDbName": "dis",
     "cmsDbName": "cms",
@@ -275,7 +275,7 @@
       }
     },
 
-
+    
 
 
     {
@@ -504,7 +504,7 @@
             "value": "[variables('informaticaDomainHostName')]"
           },
           "informaticaDomainInstanceType": {
-            "value": "Standard_DS4_v2"
+            "value": "[parameters('informaticaDomainInstanceType')]"
           },
           "informaticaDomainHostSshUsername": {
             "value": "[variables('informaticaDomainHostSshUsername')]"
