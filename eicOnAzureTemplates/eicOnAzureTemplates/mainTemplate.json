@@ -214,7 +214,7 @@
     "informaticaDomainHostSshPassword": "[parameters('informaticaAdministratorPassword')]",
     "osVersion": "eicvm",
     "imagePublisher": "informatica",
-    "imageOffer": "eic-preview",
+    "imageOffer": "eic",
 
 
     "informaticaNetworkSecurityGroupName": "[toLower(concat('infansg', uniqueString(resourceGroup().id)))]",
