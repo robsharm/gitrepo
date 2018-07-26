@@ -21,7 +21,7 @@
           {
             "name": "infaDomainUser",
             "type": "Microsoft.Common.UserNameTextBox",
-            "label": "Informatica Administrator Username",
+            "label": "EDC Informatica Administrator Username",
             "defaultValue": "Administrator",
             "toolTip": "Specify the Informatica Administrator username.",
             "constraints": {
