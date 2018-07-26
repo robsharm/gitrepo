@@ -69,13 +69,18 @@
           },
 
           {
-            "handler": "Microsoft.HDInsight",
-            "version": "0.0.1-preview",
-            "clusterFilters": {
-              "types": [ "Hadoop", "HBase", "Storm", "Spark" ],
-              "tiers": [ "Standard", "Premium" ],
-              "versions": [ "3.4" ]
-            }
+            "name": "hdiVersion",
+            "type": "Microsoft.Common.UserNameTextBox",
+            "label": "HDInsight Version",
+            "defaultValue": "version",
+            "toolTip": "Specify HDInsight version.",
+            "constraints": {
+              "required": true,
+              "regex": "^[a-z0-9A-Z_]{3,30}$",
+              "validationMessage": "Only alphanumeric characters and underscore are allowed. The value must be 3-30 character long."
+            },
+            "osPlatform": "Linux",
+            "visible": true
           },
 
           {
