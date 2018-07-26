@@ -6,7 +6,7 @@
       "value": "Robtest12321#"
     },
     "informaticaLicenseFullPath": {
-      "value": "https://iaasv2tempstoragehk.blob.core.windows.net/vmextensionstemporary-10033fff8d2bf018-20180201133523517/102_BDQ_EIC_only_9196.key?sv=2015-04-05\u0026sr=c\u0026sig=7p1gDu89N3hCORrCWiyssj3jDzp22OecbNdYsqKKFUQ%3D\u0026se=2018-02-02T13%3A35%3A23Z\u0026sp=rw"
+      "value": "https://iaasv2tempstoragehk.blob.core.windows.net/vmextensionstemporary-10033fff8d2bf018-20180423062026727/102_BDQ_EIC_only_9196.key?sv=2015-04-05\u0026sr=c\u0026sig=AB8TsoGa30q3MgC2hSmrzcrcqgy27aBFjAOLmnKouSQ%3D\u0026se=2018-04-24T06%3A20%3A26Z\u0026sp=rw"
     },
     "sqlServerPassword": {
       "value": "Robtest12321#"
@@ -15,7 +15,7 @@
       "value": "robtest"
     },
     "azureStorageName": {
-      "value": "rgrb71"
+      "value": "rbstrg7"
     },
     "vnetRG": {
       "value": "robtest"

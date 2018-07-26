@@ -69,6 +69,16 @@
           },
 
           {
+            "handler": "Microsoft.HDInsight",
+            "version": "0.0.1-preview",
+            "clusterFilters": {
+              "types": [ "Hadoop", "HBase", "Storm", "Spark" ],
+              "tiers": [ "Standard", "Premium" ],
+              "versions": [ "3.4" ]
+            }
+          },
+
+          {
             "name": "clusterSize",
             "type": "Microsoft.Common.DropDown",
             "toolTip": "Based on the size of the data set, select any of the following options to specify the size of the cluster required: (i) Minimum (two cluster head nodes and one cluster worker node) (ii) Small (two cluster head nodes and three cluster worker nodes) (iii) Medium (two cluster head nodes and five cluster worker nodes) (iv) Large (two cluster head nodes and seven cluster worker nodes) ",

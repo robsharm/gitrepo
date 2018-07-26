@@ -203,7 +203,7 @@
     "hdinsightClusterWorkerNodeType": "[parameters('clusterWorkerNodeInstanceType')]",
     "hdinsightClusterZookeeperNodeCount": "3",
     "hdinsightClusterZookeeperNodeType": "Small",
-    "hdinsightClusterVersion": "3.5",
+    "hdinsightClusterVersion": "3.6",
     "hdinsightClusterLoginUsername": "admin",
     "hdinsightClusterLoginPassword": "[parameters('informaticaAdministratorPassword')]",
 

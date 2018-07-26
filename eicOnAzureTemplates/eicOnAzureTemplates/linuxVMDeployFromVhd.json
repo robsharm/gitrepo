@@ -1,0 +1,130 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "informaticaDomainHostName": {
+      "type": "String"
+    },
+    "informaticaDomainInstanceType": {
+      "type": "String"
+    },
+    "informaticaDomainHostSshUsername": {
+      "type": "String"
+    },
+    "informaticaDomainHostSshPassword": {
+      "type": "SecureString"
+    }
+
+  },
+  "variables": {
+    "index": 0,
+    "infaDomainNodeLocation": "[resourceGroup().location]",
+    "launchServicesScriptUri": "[concat(parameters('baseUrl'),'launchServices.sh')]",
+    "nodeDNSName": "[toLower(concat(parameters('informaticaDomainHostName'), uniqueString(resourceGroup().id)))]",
+    "nodeNicName": "[concat(parameters('informaticaDomainHostName'),'Nic')]"
+  },
+  "resources": [
+    {
+      "name": "[variables('nodeDNSName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[variables('infaDomainNodeLocation')]",
+      "apiVersion": "2016-10-01",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "publicip",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('nodeDNSName')]"
+        }
+      }
+    },
+    {
+      "name": "[variables('nodeNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[variables('infaDomainNodeLocation')]",
+      "apiVersion": "2016-10-01",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]"
+      ],
+      "tags": {
+        "displayName": "niccard",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[parameters('subnetId')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('nodeDNSName'))]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('informaticaNetworkSecurityGroupName'))]"
+        }
+      }
+    },
+    {
+      "name": "[parameters('informaticaDomainHostName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[variables('infaDomainNodeLocation')]",
+      "tags": {
+        "displayName": "nodevm",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "apiVersion": "2016-03-30",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nodeNicName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('informaticaDomainInstanceType')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('informaticaDomainHostName')]",
+          "adminUsername": "[parameters('informaticaDomainHostSshUsername')]",
+          "adminPassword": "[parameters('informaticaDomainHostSshPassword')]"
+        },
+        "storageProfile": {
+          "osDisk": {
+            "name": "VMDisk",
+            "osType": "linux",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "image": {
+              "uri": "[parameters('informaticaDomainHostImageUri')]"
+            },
+            "vhd": {
+              "uri": "[concat('https://', parameters('azureStorageFqdn'), '/vhds/', parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
+            }
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nodeNicName'))]"
+            }
+          ]
+        }
+      }
+    }
+
+  ],
+  "outputs": {
+    "fqdn": {
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('nodeDNSName')), '2016-10-01').dnsSettings.fqdn]",
+      "type": "string"
+    }
+
+  }
+}
