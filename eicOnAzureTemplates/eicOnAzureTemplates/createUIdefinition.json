@@ -21,7 +21,7 @@
           {
             "name": "infaDomainUser",
             "type": "Microsoft.Common.UserNameTextBox",
-            "label": "EDC Informatica Administrator Username",
+            "label": "Informatica Administrator Username",
             "defaultValue": "Administrator",
             "toolTip": "Specify the Informatica Administrator username.",
             "constraints": {
@@ -53,7 +53,7 @@
           {
             "name": "infaDomainLicense",
             "type": "Microsoft.Common.FileUpload",
-            "label": "EDC Informatica Enterpise Data Catalog License Key",
+            "label": "Informatica Enterpise Data Catalog License Key",
             "toolTip": "Provide a valid Informatica Enterpise Data Catalog License key file.",
             "constraints": {
               "required": true,
@@ -65,6 +65,21 @@
               "openMode": "text",
               "encoding": "UTF-8"
             },
+            "visible": true
+          },
+
+          {
+            "name": "hdiVersion",
+            "type": "Microsoft.Common.UserNameTextBox",
+            "label": "HDInsight Version",
+            "defaultValue": "version",
+            "toolTip": "Specify HDInsight version.",
+            "constraints": {
+              "required": true,
+              "regex": "^[a-z0-9A-Z_]{3,30}$",
+              "validationMessage": "Only alphanumeric characters and underscore are allowed. The value must be 3-30 character long."
+            },
+            "osPlatform": "Linux",
             "visible": true
           },
 
