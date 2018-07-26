@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
   "handler": "Microsoft.Compute.MultiVm",
   "version": "0.1.2-preview",
@@ -53,7 +53,7 @@
           {
             "name": "infaDomainLicense",
             "type": "Microsoft.Common.FileUpload",
-            "label": "Informatica Enterpise Data Catalog License Key",
+            "label": "EDC Informatica Enterpise Data Catalog License Key",
             "toolTip": "Provide a valid Informatica Enterpise Data Catalog License key file.",
             "constraints": {
               "required": true,
@@ -67,22 +67,7 @@
             },
             "visible": true
           },
-          
-         {
-            "name": "hdiVersion",
-            "type": "Microsoft.Common.UserNameTextBox",
-            "label": "HDInsight Version",
-            "defaultValue": "3.6",
-            "toolTip": "Specify the HDInsight version.",
-            "constraints": {
-              "required": true,
-              "regex": "^[a-z0-9A-Z_]{3,30}$",
-              "validationMessage": "Only alphanumeric characters and underscore are allowed. The value must be 3-30 character long."
-            },
-            "osPlatform": "Linux",
-            "visible": true
-},
-          
+
           {
             "name": "clusterSize",
             "type": "Microsoft.Common.DropDown",
