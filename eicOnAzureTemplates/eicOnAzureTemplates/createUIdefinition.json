@@ -17,7 +17,6 @@
 
         "bladeTitle": "Informatica Enterprise Data Catalog",
         "elements": [
-
           {
             "name": "infaDomainUser",
             "type": "Microsoft.Common.UserNameTextBox",
@@ -65,21 +64,6 @@
               "openMode": "text",
               "encoding": "UTF-8"
             },
-            "visible": true
-          },
-
-          {
-            "name": "hdiVersion",
-            "type": "Microsoft.Common.UserNameTextBox",
-            "label": "HDInsight Version",
-            "defaultValue": "version",
-            "toolTip": "Specify HDInsight version.",
-            "constraints": {
-              "required": true,
-              "regex": "^[a-z0-9A-Z_]{3,30}$",
-              "validationMessage": "Only alphanumeric characters and underscore are allowed. The value must be 3-30 character long."
-            },
-            "osPlatform": "Linux",
             "visible": true
           },
 
