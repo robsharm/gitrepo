@@ -459,8 +459,6 @@
 
     ],
     "outputs": {
-
-
       "location": "[location()]",
       "informaticaAdministratorUsername": "[steps('infaDomainConfiguration').infaDomainUser]",
       "informaticaAdministratorPassword": "[steps('infaDomainConfiguration').infaDomainPassword]",
