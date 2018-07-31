@@ -53,7 +53,7 @@
           {
             "name": "infaDomainLicense",
             "type": "Microsoft.Common.FileUpload",
-            "label": "fsdfInformatica Enterpise Data Catalog License Key",
+            "label": "Informatica Enterpise Data Catalog License Key",
             "toolTip": "Provide a valid Informatica Enterpise Data Catalog License key file.",
             "constraints": {
               "required": true,
