@@ -36,6 +36,13 @@
         "description": "The size of Informatica domain instance."
       }
     },
+    "hdiVersion": {
+      "type": "string",
+      "defaultValue": "3.6",
+      "metadata": {
+        "description": "HDInsight version."
+      }
+    },
     "allowedIpRange": {
       "type": "string",
       "defaultValue": "*",
@@ -203,7 +210,7 @@
     "hdinsightClusterWorkerNodeType": "[parameters('clusterWorkerNodeInstanceType')]",
     "hdinsightClusterZookeeperNodeCount": "3",
     "hdinsightClusterZookeeperNodeType": "Small",
-    "hdinsightClusterVersion": "3.6",
+    "hdinsightClusterVersion": "[parameters('hdiVersion')]",
     "hdinsightClusterLoginUsername": "admin",
     "hdinsightClusterLoginPassword": "[parameters('informaticaAdministratorPassword')]",
 
