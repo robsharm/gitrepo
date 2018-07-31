@@ -17,6 +17,7 @@
 
         "bladeTitle": "Informatica Enterprise Data Catalog",
         "elements": [
+
           {
             "name": "infaDomainUser",
             "type": "Microsoft.Common.UserNameTextBox",
@@ -443,6 +444,8 @@
 
     ],
     "outputs": {
+
+
       "location": "[location()]",
       "informaticaAdministratorUsername": "[steps('infaDomainConfiguration').infaDomainUser]",
       "informaticaAdministratorPassword": "[steps('infaDomainConfiguration').infaDomainPassword]",
