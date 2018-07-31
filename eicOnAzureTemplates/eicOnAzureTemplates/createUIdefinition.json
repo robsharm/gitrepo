@@ -20,7 +20,7 @@
 
           {
             "name": "infaDomainUser",
-            "type": "Microsoft.Common.UserNameTextBox",
+            "type": "Microsoft.Compute.UserNameTextBox",
             "label": "Informatica Administrator Username",
             "defaultValue": "Administrator",
             "toolTip": "Specify the Informatica Administrator username.",
