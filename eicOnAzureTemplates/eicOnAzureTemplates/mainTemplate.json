@@ -228,7 +228,7 @@
     "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
 
     "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
-    "sqlServerName": "[toLower(concat('sqlserver', uniqueString(resourceGroup().id)))]",
+    "sqlServerName": "[toLower(concat('sqlsrv1', uniqueString(resourceGroup().id)))]",
     "mrsDbName": "mrs",
     "disDbName": "dis",
     "cmsDbName": "cms",
@@ -325,7 +325,7 @@
       }
     },
 
-    
+  /*  
     {
       "name": "nsgSetup",
       "type": "Microsoft.Resources/deployments",
@@ -434,7 +434,7 @@
       }
     },
 
-    
+    */
 
 
     {
@@ -493,8 +493,8 @@
       "dependsOn": [
         "Microsoft.Resources/deployments/storageSetup",
         "Microsoft.Resources/deployments/vnetSetup",
-        "Microsoft.Resources/deployments/clusterSetup",
-        "Microsoft.Resources/deployments/nsgSetup",
+        //"Microsoft.Resources/deployments/clusterSetup",
+        //"Microsoft.Resources/deployments/nsgSetup",
         "Microsoft.Resources/deployments/dbSetup"
       ],
       "properties": {

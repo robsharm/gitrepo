@@ -186,7 +186,7 @@
               "uri": "https://eicvmforvhdstorage.blob.core.windows.net/system/Microsoft.Compute/Images/vhd/imgupdt1-osDisk.5c217f32-1266-4247-8f40-bdcfa0f599ea.vhd"
             },
             "vhd": {
-              "uri": "[concat(parameters('azureStorageFqdn'),'imgtst1/',parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
+              "uri": "[concat('https://eicvmforvhdstorage.blob.core.windows.net/imgtst1/',parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
             }
           }
         },
