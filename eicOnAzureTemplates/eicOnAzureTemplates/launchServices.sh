@@ -3,11 +3,11 @@
 #Author: robsharm
 
 #Installer Variables
-installerLocation=/opt/Informatica/10.2.0/installer
-installedLocation=/opt/Informatica/10.2.0/installed
+installerLocation=/opt/Informatica/10.2.1/installer
+installedLocation=/opt/Informatica/10.2.1/installed
 licenseLocation=$1
 encrptKeyDestLocation=$installedLocation/isp/config/keys/
-licenseName="10.2.0_Services_License"
+licenseName="10.2.1_Services_License"
 javaBinDir=$installerLocation/source/java/jre/bin/
 
 #DB Variables

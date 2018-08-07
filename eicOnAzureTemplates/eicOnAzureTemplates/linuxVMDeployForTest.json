@@ -176,6 +176,8 @@
           "adminUsername": "[parameters('informaticaDomainHostSshUsername')]",
           "adminPassword": "[parameters('informaticaDomainHostSshPassword')]"
         },
+
+        /*
         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
@@ -193,9 +195,9 @@
           }
         },
 
-
+        */
         //For Testing - Start - Remove after image being staged
-        /* "storageProfile": {
+         "storageProfile": {
           "osDisk": {
             "name": "VMDisk",
             "osType": "linux",
@@ -208,7 +210,7 @@
               "uri": "[concat(parameters('informaticaDomainHostVhdLocation'), parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
             }
           }
-        },*/
+        },
         //For Testing - End - Remove after image being staged
         "networkProfile": {
           "networkInterfaces": [

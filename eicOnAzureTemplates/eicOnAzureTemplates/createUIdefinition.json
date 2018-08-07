@@ -17,21 +17,6 @@
 
         "bladeTitle": "Informatica Enterprise Data Catalog",
         "elements": [
-
-          {
-            "name": "infaDomainUser",
-            "type": "Microsoft.Compute.UserNameTextBox",
-            "label": "Informatica Administrator Username",
-            "defaultValue": "Administrator",
-            "toolTip": "Specify the Informatica Administrator username.",
-            "constraints": {
-              "required": true,
-              "regex": "^[a-z0-9A-Z_]{3,30}$",
-              "validationMessage": "Only alphanumeric characters and underscore are allowed. The value must be 3-30 character long."
-            },
-            "osPlatform": "Linux",
-            "visible": true
-          },
           {
             "name": "infaDomainPassword",
             "type": "Microsoft.Common.PasswordBox",
