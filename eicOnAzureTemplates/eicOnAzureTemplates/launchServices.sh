@@ -15,7 +15,7 @@ dbServerUser=$2
 dbServerPassword=$3
 dbServerAddress=$4
 dbServerPort="1433"
-dbAccessSSLSuffix=";encryptionMethod=SSL;ValidateServerCertificate=true"
+dbAccessSSLSuffix=";encryptionMethod=SSL;ValidateServerCertificate=false"
 dbServerCompleteAddress="$dbServerAddress:$dbServerPort"
 dbType="MSSQLServer"
 
@@ -202,13 +202,11 @@ echo "Running Informatica Installer..."
 $javaBinDir/java -jar $installerLocation/mercuryInstaller/mercury_setup.jar -cf $installerLocation/config_template.xml -s -uei
 
 echo "Creating Catalog Service..."
-$installedLocation/isp/bin/infacmd.sh  LDM createService -dn $domainName -nn $domainNode -un $domainUsername -pd $domainPassword -mrs $mrsName -mrsun $domainUsername -mrspd $domainPassword -dis $disName -sn $catName -p 6705 -ise true -chdt HortonWorks -chdu $clusterUrl -chduu $clusterLoginUsername -chdup $clusterLoginPassword
+$installedLocation/isp/bin/infacmd.sh  LDM createService -dn $domainName -nn $domainNode -un $domainUsername -pd $domainPassword -mrs $mrsName -mrsun $domainUsername -mrspd $domainPassword -sn $catName -p 6705 -ise true -chdt HDInsight -chdu $clusterUrl -chduu $clusterLoginUsername -chdup $clusterLoginPassword -lt $loadType
 
 echo "Assigning License to Catalog Service..."
 $installedLocation/isp/bin/infacmd.sh  assignLicense -dn $domainName -un $domainUsername -pd $domainPassword -ln $licenseName -sn $catName
 
-echo "Setting Load Type for Catalog Service..."
-$installedLocation/isp/bin/infacmd.sh  ldm updateServiceOptions -dn $domainName -un $domainUsername -pd $domainPassword -sn $catName -o "LdmCustomOptions.loadType=$loadType"
 
 if [ "$importSampleData" == "true" ]
 then

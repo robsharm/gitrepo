@@ -228,7 +228,7 @@
     "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
 
     "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
-    "sqlServerName": "[toLower(concat('sqlsrv1', uniqueString(resourceGroup().id)))]",
+    "sqlServerName": "[toLower(concat('sqlsrv71', uniqueString(resourceGroup().id)))]",
     "mrsDbName": "mrs",
     "disDbName": "dis",
     "cmsDbName": "cms",
@@ -248,7 +248,7 @@
   "resources": [
 
 
-    {
+  /*  {
       "name": "storageSetup",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
@@ -482,10 +482,10 @@
           }
         }
       }
-    },
+    }
     
     
-
+/*
     {
       "name": "infaDomainNodeSetup",
       "type": "Microsoft.Resources/deployments",
@@ -596,7 +596,7 @@
           }
         }
       }
-    }
+    }*/
   ],
   "outputs": {}
 }
