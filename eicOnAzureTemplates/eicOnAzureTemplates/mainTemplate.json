@@ -56,7 +56,7 @@
         "low",
         "medium",
         "high",
-        "default"
+        "demo"
       ],
       "defaultValue": "default",
       "metadata": {
@@ -200,7 +200,7 @@
     "hdinsightClusterType": "hadoop",
     "clusterWorkerNodeCounts": {
       "low": "3",
-      "default": "1",
+      "demo": "1",
       "medium": "5",
       "high": "7"
     },
@@ -228,7 +228,7 @@
     "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
 
     "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
-    "sqlServerName": "[toLower(concat('sqlsrv71', uniqueString(resourceGroup().id)))]",
+    "sqlServerName": "[toLower(concat('sql7vrsr', uniqueString(resourceGroup().id)))]",
     "mrsDbName": "mrs",
     "disDbName": "dis",
     "cmsDbName": "cms",
@@ -248,7 +248,7 @@
   "resources": [
 
 
-  /*  {
+    {
       "name": "storageSetup",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
@@ -325,7 +325,7 @@
       }
     },
 
-  /*  
+    
     {
       "name": "nsgSetup",
       "type": "Microsoft.Resources/deployments",
@@ -434,7 +434,7 @@
       }
     },
 
-    */
+    
 
 
     {
@@ -482,10 +482,10 @@
           }
         }
       }
-    }
+    },
     
     
-/*
+
     {
       "name": "infaDomainNodeSetup",
       "type": "Microsoft.Resources/deployments",
@@ -493,8 +493,8 @@
       "dependsOn": [
         "Microsoft.Resources/deployments/storageSetup",
         "Microsoft.Resources/deployments/vnetSetup",
-        //"Microsoft.Resources/deployments/clusterSetup",
-        //"Microsoft.Resources/deployments/nsgSetup",
+        "Microsoft.Resources/deployments/clusterSetup",
+        "Microsoft.Resources/deployments/nsgSetup",
         "Microsoft.Resources/deployments/dbSetup"
       ],
       "properties": {
@@ -596,7 +596,7 @@
           }
         }
       }
-    }*/
+    }
   ],
   "outputs": {}
 }

@@ -183,10 +183,10 @@
             "caching": "ReadWrite",
             "createOption": "FromImage",
             "image": {
-              "uri": "https://eicvmforvhdstorage.blob.core.windows.net/system/Microsoft.Compute/Images/vhd/finalimgup-osDisk.79932f83-1e5c-4b1c-8e76-19ab883af312.vhd"
+              "uri": "https://eicvmforvhdstorage.blob.core.windows.net/system/Microsoft.Compute/Images/vhd/ffimgvm7-osDisk.1f6a9e7a-5ed3-42e8-9158-398cdc816d97.vhd"
             },
             "vhd": {
-              "uri": "[concat('https://eicvmforvhdstorage.blob.core.windows.net/fimgtst7/',parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
+              "uri": "[concat('https://eicvmforvhdstorage.blob.core.windows.net/fffimg77/',parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
             }
           }
         },
