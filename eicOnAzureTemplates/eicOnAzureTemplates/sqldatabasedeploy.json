@@ -97,7 +97,7 @@
           "properties": {
             "collation": "[variables('sqlCollation')]",
             "edition": "[variables('sqlEdition')]",
-            "requestedServiceObjectiveName": "S2"
+            "requestedServiceObjectiveName": "S1"
           },
           "type": "databases"
         },
@@ -111,7 +111,7 @@
           "properties": {
             "collation": "[variables('sqlCollation')]",
             "edition": "[variables('sqlEdition')]",
-            "requestedServiceObjectiveName": "S2"
+            "requestedServiceObjectiveName": "S3"
           },
           "type": "databases"
         },
