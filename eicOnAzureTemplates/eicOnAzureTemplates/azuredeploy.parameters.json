@@ -6,7 +6,7 @@
       "value": "Robtest12321#"
     },
     "informaticaLicenseFullPath": {
-      "value": "https://iaasv2tempstoragehk.blob.core.windows.net/vmextensionstemporary-10033fff8d2bf018-20180813073513861/102_BDQ_EIC_only_9196.key?sv=2015-04-05\u0026sr=c\u0026sig=wZG258Et2pA9LgauePj2zNsearCk2wSwt7xlLiNRrAo%3D\u0026se=2018-08-14T07%3A35%3A13Z\u0026sp=rw"
+      "value": "https://iaasv2tempstoragehk.blob.core.windows.net/vmextensionstemporary-10033fff8d2bf018-20180816062719183/102_BDQ_EIC_only_9196.key?sv=2015-04-05\u0026sr=c\u0026sig=67jQLXcHuFDsp7x58LmE7jHXaopOUdhYmst0dOB2Lnw%3D\u0026se=2018-08-17T06%3A27%3A19Z\u0026sp=rw"
     },
     "sqlServerPassword": {
       "value": "Robtest12321#"
@@ -33,7 +33,7 @@
       "value": "10.7.0.0/24"
     },
     "informaticaDomainInstanceType": {
-      "value": "Standard_D4s_v3"
+      "value": "Standard_DS4_v2"
     },
     "allowedIpRange": {
       "value": "*"
@@ -45,10 +45,10 @@
       "value": "true"
     },
     "storageExistingOrNew": {
-      "value": "new"
+      "value": "existing"
     },
     "vnetExistingOrNew": {
-      "value": "new"
+      "value": "existing"
     },
     "sqlServerUsername": {
       "value": "dbuser1"

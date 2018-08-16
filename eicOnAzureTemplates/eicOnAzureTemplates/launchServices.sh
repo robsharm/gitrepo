@@ -218,6 +218,14 @@ sleep 5
 echo "Enabling Catalog Service..."
 $installedLocation/isp/bin/infacmd.sh enableService -dn $domainName -un $domainUsername -pd $domainPassword -sn $catName
 
+if [ "$importSampleData" == "true" ] && [ "$loadType" != "medium" ]
+then
+	echo "Reindexing Solr Contents..."
+	curl -I -u $domainUsername:$domainPassword -X POST --header "Content-Type: application/json" --header "Accept: application/json" "http://$domainHostname:6705/access/1/catalog/data/search/index"
+fi
+
+sleep 120
+
 echo "Creating Analyst Service..."
 $installedLocation/isp/bin/infacmd.sh as createService -dn $domainName -nn $domainNode -sn $analystServiceName -un $domainUsername -pd $domainPassword -rs $mrsName -ds $disName -ffl /tmp -cs $catName -csau $domainUsername -csap $domainPassword -au $domainUsername -ap $domainPassword -bgefd /tmp -HttpPort 6805
 
