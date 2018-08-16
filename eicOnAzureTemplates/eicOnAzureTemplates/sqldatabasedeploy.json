@@ -83,7 +83,7 @@
           "properties": {
             "collation": "[variables('sqlCollation')]",
             "edition": "[variables('sqlEdition')]",
-            "requestedServiceObjectiveName": "S3"
+            "requestedServiceObjectiveName": "S4"
           },
           "type": "databases"
         },
