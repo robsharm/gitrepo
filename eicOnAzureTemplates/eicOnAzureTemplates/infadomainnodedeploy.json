@@ -196,7 +196,7 @@
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('osVersion')]",
-            "version": "1.0.3"
+            "version": "latest"
           },
           "osDisk": {
             "name": "InfaOSDisk",
