@@ -162,11 +162,11 @@
         "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nodeNicName'))]"
       ],
-   /*   "plan": {
+      "plan": {
         "name": "[parameters('osVersion')]",
         "publisher": "[parameters('imagePublisher')]",
         "product": "[parameters('imageOffer')]"
-      },*/
+      },
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('informaticaDomainInstanceType')]"
@@ -176,6 +176,7 @@
           "adminUsername": "[parameters('informaticaDomainHostSshUsername')]",
           "adminPassword": "[parameters('informaticaDomainHostSshPassword')]"
         },
+        /*
         "storageProfile": {
           "osDisk": {
             "name": "VMDisk",
@@ -189,13 +190,13 @@
               "uri": "[concat('https://eicvmforvhdstorage.blob.core.windows.net/fimgaesizeup/',parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
             }
           }
-        },
-        /* "storageProfile": {
+        },*/
+         "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
             "sku": "[parameters('osVersion')]",
-            "version": "latest"
+            "version": "1.0.3"
           },
           "osDisk": {
             "name": "InfaOSDisk",
@@ -205,7 +206,7 @@
               "uri": "[concat(parameters('azureStorageFqdn'), 'vhds/', parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
             }
           }
-        },*/
+        },
         "networkProfile": {
           "networkInterfaces": [
             {
