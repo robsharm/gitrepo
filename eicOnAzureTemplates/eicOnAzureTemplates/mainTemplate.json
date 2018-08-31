@@ -182,16 +182,10 @@
       },
       "defaultValue": "https://raw.githubusercontent.com/robsharm/gitrepo/master/eicOnAzureTemplates/eicOnAzureTemplates"
     },
-    //remove testing tags
     "informaticaTags": {
       "type": "object",
       "defaultValue": {
-        "provider": "AACF690D-C725-4C78-9B1E-E586595B369F",
-        "TEAM": "R&D IND CORE METADATA",
-        "Businees Unit": "CMG",
-        "SUBGROUP": "Murthy, Sathesh <smurthy@informatica.com>",
-        "Owner": "robsharma@informatica.com",
-        "PROJECT": "EDC"
+        "provider": "AACF690D-C725-4C78-9B1E-E586595B369F"
       }
     }
   },
@@ -227,14 +221,14 @@
     "informaticaDomainHostSshPassword": "[parameters('informaticaAdministratorPassword')]",
     "osVersion": "eicvm",
     "imagePublisher": "informatica",
-    "imageOffer": "eic",
+    "imageOffer": "eic-preview",
 
 
     "informaticaNetworkSecurityGroupName": "[toLower(concat('infansg', uniqueString(resourceGroup().id)))]",
     "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
 
     "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
-    "sqlServerName": "[toLower(concat('srve757l', uniqueString(resourceGroup().id)))]",
+    "sqlServerName": "[toLower(concat('sqlserver', uniqueString(resourceGroup().id)))]",
     "mrsDbName": "mrs",
     "disDbName": "dis",
     "cmsDbName": "cms",
@@ -332,7 +326,7 @@
     },
 
     
-  /*  {
+    {
       "name": "nsgSetup",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2016-09-01",
@@ -441,7 +435,7 @@
     },
 
     
-    */
+    
 
     {
       "name": "dbSetup",
@@ -499,8 +493,8 @@
       "dependsOn": [
         "Microsoft.Resources/deployments/storageSetup",
         "Microsoft.Resources/deployments/vnetSetup",
-       // "Microsoft.Resources/deployments/clusterSetup",
-       // "Microsoft.Resources/deployments/nsgSetup",
+        "Microsoft.Resources/deployments/clusterSetup",
+        "Microsoft.Resources/deployments/nsgSetup",
         "Microsoft.Resources/deployments/dbSetup"
       ],
       "properties": {

@@ -45,10 +45,10 @@
       "value": "true"
     },
     "storageExistingOrNew": {
-      "value": "new"
+      "value": "existing"
     },
     "vnetExistingOrNew": {
-      "value": "new"
+      "value": "existing"
     },
     "sqlServerUsername": {
       "value": "dbuser1"
