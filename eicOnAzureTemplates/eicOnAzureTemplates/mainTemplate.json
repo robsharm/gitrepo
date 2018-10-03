@@ -220,7 +220,7 @@
     "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
 
     "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
-    "sqlServerName": "[toLower(concat('sqlserver7', uniqueString(resourceGroup().id)))]",
+    "sqlServerName": "[toLower(concat('sqlserver', uniqueString(resourceGroup().id)))]",
     "mrsDbName": "mrs",
     "disDbName": "dis",
     "cmsDbName": "cms",
