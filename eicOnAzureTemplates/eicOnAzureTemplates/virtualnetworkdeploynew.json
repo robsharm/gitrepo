@@ -37,7 +37,7 @@
       "condition": "[equals(parameters('vnetExistingOrNew'), 'new')]",
       "type": "Microsoft.Network/virtualNetworks",
       "location": "[parameters('vnetLocation')]",
-      "apiVersion": "2016-10-01",
+      "apiVersion": "2018-06-01",
       "tags": {
         "displayName": "vnet",
         "provider": "[toUpper(parameters('informaticaTags').provider)]"

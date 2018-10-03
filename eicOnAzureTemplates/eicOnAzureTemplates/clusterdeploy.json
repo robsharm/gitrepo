@@ -61,8 +61,8 @@
     }
   },
   "variables": {
-    "defaultApiVersion": "2016-01-01",
-    "clusterApiVersion": "2015-03-01-preview",
+    "storageApiVersion": "2018-02-01",
+    "clusterApiVersion": "2018-06-01-preview",
     "formattedStorageName": "[ substring(parameters('azureStorageFqdn'),8,sub(length(parameters('azureStorageFqdn')),9)) ]"
   },
   "resources": [
@@ -97,7 +97,7 @@
               "name": "[variables('formattedStorageName')]",
               "isDefault": true,
               "container": "[parameters('hdinsightClusterName')]",
-              "key": "[listKeys(parameters('azureStorageId'), variables('defaultApiVersion')).keys[0].value]"
+              "key": "[listKeys(parameters('azureStorageId'), variables('storageApiVersion')).keys[0].value]"
             }
           ]
         },

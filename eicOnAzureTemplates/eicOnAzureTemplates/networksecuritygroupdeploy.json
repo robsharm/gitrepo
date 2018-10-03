@@ -21,7 +21,7 @@
     {
       "type": "Microsoft.Network/networkSecurityGroups",
       "name": "[parameters('informaticaNetworkSecurityGroupName')]",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-06-01",
       "tags": {
         "displayName": "nsg",
         "provider": "[toUpper(parameters('informaticaTags').provider)]"
