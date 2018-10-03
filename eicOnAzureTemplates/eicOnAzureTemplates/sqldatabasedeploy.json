@@ -97,7 +97,7 @@
           "location": "[parameters('sqlServerDeployLocation')]",
           "name": "[variables('sqlDatabaseNameDIS')]",
           "sku": {
-            "name": "S2",
+            "name": "S1",
             "tier": "Standard"
           },
           "properties": {
