@@ -304,19 +304,6 @@
           },
 
           {
-            "name": "hdiVersion",
-            "type": "Microsoft.Common.TextBox",
-            "label": "HDInsight Version",
-            "defaultValue": "3.6",
-            "toolTip": "HDInsight version that will be deployed.",
-            "constraints": {
-              "required": true,
-              "regex": "^\\d+(.\\d+){0,1}$",
-              "validationMessage": "The value should be a decimal number."
-            }
-          },
-
-          {
             "name": "allowedIpRange",
             "type": "Microsoft.Common.TextBox",
             "label": "CIDR IP Address Range",
@@ -451,7 +438,6 @@
       "informaticaDomainInstanceType": "[coalesce(steps('infaDomainConfiguration').informaticaServerInstanceSizeMinimum,steps('infaDomainConfiguration').informaticaServerInstanceSizeOther)]",
       "clusterHeadNodeInstanceType": "[coalesce(steps('infaDomainConfiguration').clusterHeadNodeInstanceSizeLarge,steps('infaDomainConfiguration').clusterHeadNodeInstanceSizeOther)]",
       "clusterWorkerNodeInstanceType": "[steps('infaDomainConfiguration').clusterWorkerNodeInstanceSize]",
-      "hdiVersion": "[steps('infaDomainConfiguration').hdiVersion]",
       "allowedIpRange": "[steps('infaDomainConfiguration').allowedIpRange]",
       "importSampleData": "[steps('infaDomainConfiguration').importSampleContents]",
 

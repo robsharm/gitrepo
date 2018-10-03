@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "location": {
-      "defaultValue": "Southeast Asia",
       "type": "String",
       "metadata": {
         "description": "The location where all azure resources will be deployed."
@@ -34,13 +33,6 @@
       "type": "String",
       "metadata": {
         "description": "The size of Informatica domain instance."
-      }
-    },
-    "hdiVersion": {
-      "type": "string",
-      "defaultValue": "3.6",
-      "metadata": {
-        "description": "HDInsight version."
       }
     },
     "allowedIpRange": {
@@ -92,7 +84,6 @@
 
     "sqlServerUsername": {
       "type": "string",
-      "defaultValue": "dbuser",
       "metadata": {
         "description": "Database username to be created for the Informatica domain and services."
       }
@@ -210,7 +201,7 @@
     "hdinsightClusterWorkerNodeType": "[parameters('clusterWorkerNodeInstanceType')]",
     "hdinsightClusterZookeeperNodeCount": "3",
     "hdinsightClusterZookeeperNodeType": "Small",
-    "hdinsightClusterVersion": "[parameters('hdiVersion')]",
+    "hdinsightClusterVersion": "3.6",
     "hdinsightClusterLoginUsername": "admin",
     "hdinsightClusterLoginPassword": "[parameters('informaticaAdministratorPassword')]",
 
@@ -251,7 +242,7 @@
     {
       "name": "storageSetup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-05-01",
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -282,13 +273,13 @@
       }
     },
 
-    
+
 
 
     {
       "name": "vnetSetup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-05-01",
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -325,11 +316,11 @@
       }
     },
 
-    
+
     {
       "name": "nsgSetup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-05-01",
       "dependsOn": [],
       "properties": {
         "mode": "Incremental",
@@ -360,7 +351,7 @@
     {
       "name": "clusterSetup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-05-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/storageSetup",
         "Microsoft.Resources/deployments/vnetSetup"
@@ -434,13 +425,13 @@
       }
     },
 
-    
-    
+
+
 
     {
       "name": "dbSetup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-05-01",
       "dependsOn": [
       ],
       "properties": {
@@ -483,13 +474,13 @@
         }
       }
     },
-    
-    
+
+
 
     {
       "name": "infaDomainNodeSetup",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2016-09-01",
+      "apiVersion": "2018-05-01",
       "dependsOn": [
         "Microsoft.Resources/deployments/storageSetup",
         "Microsoft.Resources/deployments/vnetSetup",

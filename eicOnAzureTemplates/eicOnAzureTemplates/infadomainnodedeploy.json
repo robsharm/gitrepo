@@ -104,7 +104,7 @@
       "name": "[variables('nodeDNSName')]",
       "type": "Microsoft.Network/publicIPAddresses",
       "location": "[parameters('infaDomainNodeLocation')]",
-      "apiVersion": "2016-10-01",
+      "apiVersion": "2018-06-01",
       "dependsOn": [],
       "tags": {
         "displayName": "publicip",
@@ -121,7 +121,7 @@
       "name": "[variables('nodeNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('infaDomainNodeLocation')]",
-      "apiVersion": "2016-10-01",
+      "apiVersion": "2018-06-01",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]"
       ],
@@ -157,7 +157,7 @@
         "displayName": "nodevm",
         "provider": "[toUpper(parameters('informaticaTags').provider)]"
       },
-      "apiVersion": "2016-03-30",
+      "apiVersion": "2018-06-01",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nodeNicName'))]"
@@ -176,7 +176,7 @@
           "adminUsername": "[parameters('informaticaDomainHostSshUsername')]",
           "adminPassword": "[parameters('informaticaDomainHostSshPassword')]"
         },
-         "storageProfile": {
+        "storageProfile": {
           "imageReference": {
             "publisher": "[parameters('imagePublisher')]",
             "offer": "[parameters('imageOffer')]",
@@ -205,7 +205,7 @@
           "name": "scriptExtension",
           "type": "extensions",
           "location": "[parameters('infaDomainNodeLocation')]",
-          "apiVersion": "2015-06-15",
+          "apiVersion": "2018-06-01",
           "tags": {
             "displayName": "vmscriptext",
             "provider": "[toUpper(parameters('informaticaTags').provider)]"
