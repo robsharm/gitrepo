@@ -15,7 +15,7 @@
       "value": "robtest"
     },
     "azureStorageName": {
-      "value": "strrb7"
+      "value": "stfsg5"
     },
     "vnetRG": {
       "value": "robtest"
@@ -27,7 +27,7 @@
       "value": "10.7.0.0/24"
     },
     "informaticaSubnetName": {
-      "value": "rsubne"
+      "value": "rsubnet"
     },
     "subnetPrefix": {
       "value": "10.7.0.0/24"
