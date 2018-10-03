@@ -22,7 +22,7 @@
     }
   },
   "variables": {
-    "apiVersion": "2016-01-01",
+    "apiVersion": "2018-02-01",
     "storageID": "[resourceId(parameters('azureStorageRG'), 'Microsoft.Storage/storageAccounts', parameters('azureStorageName'))]"
   },
   "resources": [
