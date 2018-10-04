@@ -201,6 +201,9 @@ sed -i -e "s/importsampledata/$importSampleData/g" $installerLocation/config_tem
 echo "Running Informatica Installer..."
 $javaBinDir/java -jar $installerLocation/mercuryInstaller/mercury_setup.jar -cf $installerLocation/config_template.xml -s -uei
 
+echo "Updating domain monitoring option..."
+$installedLocation/isp/bin/infacmd.sh updateMonitoringOptions -dn $domainName -un $domainUsername -pd $domainPassword -rs $mrsName -rsun $domainUsername -rspd $domainPassword
+
 echo "Creating Catalog Service..."
 $installedLocation/isp/bin/infacmd.sh  LDM createService -dn $domainName -nn $domainNode -un $domainUsername -pd $domainPassword -mrs $mrsName -mrsun $domainUsername -mrspd $domainPassword -sn $catName -p 6705 -ise true -chdt HDInsight -chdu $clusterUrl -chduu $clusterLoginUsername -chdup $clusterLoginPassword -lt $loadType
 

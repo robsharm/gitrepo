@@ -89,8 +89,8 @@
             "visible": "[equals(steps('infaDomainConfiguration').clusterSize, 'demo')]",
             "toolTip": "The size of Informatica server instance.",
             "recommendedSizes": [
+              "Standard_D13_v2",
               "Standard_D4_v2",
-              "Standard_D3_v2",
               "Standard_D5_v2"
             ],
             "constraints": {
@@ -155,7 +155,7 @@
             "label": "Informatica Server Instance Type",
             "toolTip": "The size of Informatica server instance.",
             "recommendedSizes": [
-              "Standard_D4_v2",
+              "Standard_D13_v2",
               "Standard_D5_v2",
               "Standard_D13_v2"
             ],
