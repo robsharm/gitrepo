@@ -208,7 +208,7 @@
 
 
     "informaticaDomainHostName": "[toLower(concat('infadomainnode', uniqueString(resourceGroup().id)))]",
-    "infaDomainNodeDeployTemplateUri": "[concat(variables('baseUri'), 'infadomainnodedeploy.json')]",
+    "infaDomainNodeDeployTemplateUri": "[concat(variables('baseUri'), 'infadomainnodedeployGovCloud.json')]",
     "informaticaDomainHostSshUsername": "sshuser",
     "informaticaDomainHostSshPassword": "[parameters('informaticaAdministratorPassword')]",
     "osVersion": "eicvm",

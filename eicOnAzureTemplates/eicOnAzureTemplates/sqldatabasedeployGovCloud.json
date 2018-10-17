@@ -66,11 +66,10 @@
           ],
           "location": "[parameters('sqlServerDeployLocation')]",
           "name": "[variables('sqlDatabaseNameDomain')]",
-          "sku": {
-            "name": "S1",
-            "tier": "Standard"
-          },
           "properties": {
+            "collation": "[variables('sqlCollation')]",
+            "edition": "[variables('sqlEdition')]",
+            "requestedServiceObjectiveName": "S1"
           },
           "type": "databases"
         },
@@ -81,11 +80,10 @@
           ],
           "location": "[parameters('sqlServerDeployLocation')]",
           "name": "[variables('sqlDatabaseNameMRS')]",
-          "sku": {
-            "name": "S4",
-            "tier": "Standard"
-          },
           "properties": {
+            "collation": "[variables('sqlCollation')]",
+            "edition": "[variables('sqlEdition')]",
+            "requestedServiceObjectiveName": "S4"
           },
           "type": "databases"
         },
@@ -96,11 +94,11 @@
           ],
           "location": "[parameters('sqlServerDeployLocation')]",
           "name": "[variables('sqlDatabaseNameDIS')]",
-          "sku": {
-            "name": "S1",
-            "tier": "Standard"
-          },
+
           "properties": {
+            "collation": "[variables('sqlCollation')]",
+            "edition": "[variables('sqlEdition')]",
+            "requestedServiceObjectiveName": "S1"
           },
           "type": "databases"
         },
@@ -111,11 +109,11 @@
           ],
           "location": "[parameters('sqlServerDeployLocation')]",
           "name": "[variables('sqlDatabaseNameCMS')]",
-          "sku": {
-            "name": "S4",
-            "tier": "Standard"
-          },
+
           "properties": {
+            "collation": "[variables('sqlCollation')]",
+            "edition": "[variables('sqlEdition')]",
+            "requestedServiceObjectiveName": "S4"
           },
           "type": "databases"
         },
