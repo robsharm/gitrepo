@@ -1,0 +1,144 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sqlServerPassword": {
+      "type": "securestring"
+    },
+    "sqlServerDeployLocation": {
+      "type": "string"
+    },
+    "sqlDbDeployUri": {
+      "type": "string"
+    },
+    "sqlServerUsername": {
+      "type": "string"
+    },
+    "sqlServerName": {
+      "type": "string"
+    },
+    "domainDbName": {
+      "type": "string"
+    },
+    "mrsDbName": {
+      "type": "string"
+    },
+    "disDbName": {
+      "type": "string"
+    },
+    "cmsDbName": {
+      "type": "string"
+    },
+    "informaticaTags": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "sqlAdministratorLogin": "[parameters('sqlServerUsername')]",
+    "sqlCollation": "SQL_Latin1_General_CP1_CI_AS",
+    "sqlDatabaseNameDomain": "[parameters('domainDbName')]",
+    "sqlDatabaseNameMRS": "[parameters('mrsDbName')]",
+    "sqlDatabaseNameDIS": "[parameters('disDbName')]",
+    "sqlDatabaseNameCMS": "[parameters('cmsDbName')]",
+    "sqlEdition": "Standard",
+    "sqlServerName": "[parameters('sqlServerName')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Sql/servers",
+      "location": "[parameters('sqlServerDeployLocation')]",
+      "tags": {
+        "displayName": "sqlserver",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "name": "[variables('sqlServerName')]",
+      "properties": {
+        "administratorLogin": "[variables('sqlAdministratorLogin')]",
+        "administratorLoginPassword": "[parameters('sqlServerPassword')]",
+        "version": "12.0"
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-05-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+          ],
+          "location": "[parameters('sqlServerDeployLocation')]",
+          "name": "[variables('sqlDatabaseNameDomain')]",
+          "sku": {
+            "name": "S1",
+            "tier": "Standard"
+          },
+          "properties": {
+          },
+          "type": "databases"
+        },
+        {
+          "apiVersion": "2015-05-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+          ],
+          "location": "[parameters('sqlServerDeployLocation')]",
+          "name": "[variables('sqlDatabaseNameMRS')]",
+          "sku": {
+            "name": "S4",
+            "tier": "Standard"
+          },
+          "properties": {
+          },
+          "type": "databases"
+        },
+        {
+          "apiVersion": "2015-05-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+          ],
+          "location": "[parameters('sqlServerDeployLocation')]",
+          "name": "[variables('sqlDatabaseNameDIS')]",
+          "sku": {
+            "name": "S1",
+            "tier": "Standard"
+          },
+          "properties": {
+          },
+          "type": "databases"
+        },
+        {
+          "apiVersion": "2015-05-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+          ],
+          "location": "[parameters('sqlServerDeployLocation')]",
+          "name": "[variables('sqlDatabaseNameCMS')]",
+          "sku": {
+            "name": "S4",
+            "tier": "Standard"
+          },
+          "properties": {
+          },
+          "type": "databases"
+        },
+        {
+          "apiVersion": "2015-05-01-preview",
+          "type": "firewallrules",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('sqlServerName'))]"
+          ],
+          "location": "[parameters('sqlServerDeployLocation')]",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "sqlServerFqdn": {
+      "value": "[reference(resourceId('Microsoft.Sql/servers', variables('sqlServerName'))).fullyQualifiedDomainName]",
+      "type": "string"
+    }
+  }
+}

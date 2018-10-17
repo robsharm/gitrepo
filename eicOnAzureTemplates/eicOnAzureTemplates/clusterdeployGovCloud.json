@@ -1,0 +1,168 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "hdinsightClusterVersion": {
+      "type": "String"
+    },
+    "hdinsightClusterName": {
+      "type": "String"
+    },
+    "hdinsightClusterLoginUsername": {
+      "type": "String"
+    },
+    "hdinsightClusterLoginPassword": {
+      "type": "SecureString"
+    },
+    "hdinsightClusterHostSshUsername": {
+      "type": "String"
+    },
+    "hdinsightClusterHostSshPassword": {
+      "type": "SecureString"
+    },
+    "clusterDeployLocation": {
+      "type": "String"
+    },
+    "hdinsightClusterType": {
+      "type": "String"
+    },
+    "hdinsightClusterHeadNodeCount": {
+      "type": "String"
+    },
+    "hdinsightClusterHeadNodeType": {
+      "type": "String"
+    },
+    "hdinsightClusterWorkerNodeCount": {
+      "type": "String"
+    },
+    "hdinsightClusterWorkerNodeType": {
+      "type": "String"
+    },
+    "hdinsightClusterZookeeperNodeCount": {
+      "type": "String"
+    },
+    "hdinsightClusterZookeeperNodeType": {
+      "type": "String"
+    },
+    "azureStorageId": {
+      "type": "String"
+    },
+    "azureStorageFqdn": {
+      "type": "String"
+    },
+    "vnetId": {
+      "type": "String"
+    },
+    "subnetId": {
+      "type": "String"
+    },
+    "informaticaTags": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "storageApiVersion": "2018-02-01",
+    "clusterApiVersion": "2015-03-01-preview",
+    "formattedStorageName": "[ substring(parameters('azureStorageFqdn'),8,sub(length(parameters('azureStorageFqdn')),9)) ]"
+  },
+  "resources": [
+
+    {
+      "type": "Microsoft.HDInsight/clusters",
+      "name": "[parameters('hdinsightClusterName')]",
+      "apiVersion": "[variables('clusterApiVersion')]",
+      "location": "[parameters('clusterDeployLocation')]",
+      "tags": {
+        "displayName": "cluster",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "dependsOn": [],
+      "properties": {
+        "clusterVersion": "[parameters('hdinsightClusterVersion')]",
+        "osType": "Linux",
+        "tier": "standard",
+        "clusterDefinition": {
+          "kind": "[parameters('hdinsightClusterType')]",
+          "configurations": {
+            "gateway": {
+              "restAuthCredential.isEnabled": true,
+              "restAuthCredential.username": "[parameters('hdinsightClusterLoginUsername')]",
+              "restAuthCredential.password": "[parameters('hdinsightClusterLoginPassword')]"
+            }
+          }
+        },
+        "storageProfile": {
+          "storageaccounts": [
+            {
+              "name": "[variables('formattedStorageName')]",
+              "isDefault": true,
+              "container": "[parameters('hdinsightClusterName')]",
+              "key": "[listKeys(parameters('azureStorageId'), variables('storageApiVersion')).keys[0].value]"
+            }
+          ]
+        },
+        "computeProfile": {
+          "roles": [
+            {
+              "name": "headnode",
+              "targetInstanceCount": "[parameters('hdinsightClusterHeadNodeCount')]",
+              "hardwareProfile": {
+                "vmSize": "[parameters('hdinsightClusterHeadNodeType')]"
+              },
+              "osProfile": {
+                "linuxOperatingSystemProfile": {
+                  "username": "[parameters('hdinsightClusterHostSshUsername')]",
+                  "password": "[parameters('hdinsightClusterHostSshPassword')]"
+                }
+              },
+              "virtualNetworkProfile": {
+                "id": "[parameters('vnetId')]",
+                "subnet": "[parameters('subnetId')]"
+              }
+            },
+            {
+              "name": "workernode",
+              "targetInstanceCount": "[parameters('hdinsightClusterWorkerNodeCount')]",
+              "hardwareProfile": {
+                "vmSize": "[parameters('hdinsightClusterWorkerNodeType')]"
+              },
+              "osProfile": {
+                "linuxOperatingSystemProfile": {
+                  "username": "[parameters('hdinsightClusterHostSshUsername')]",
+                  "password": "[parameters('hdinsightClusterHostSshPassword')]"
+                }
+              },
+              "virtualNetworkProfile": {
+                "id": "[parameters('vnetId')]",
+                "subnet": "[parameters('subnetId')]"
+              }
+            },
+            {
+              "name": "zookeepernode",
+              "targetInstanceCount": "[parameters('hdinsightClusterZookeeperNodeCount')]",
+              "hardwareProfile": {
+                "vmSize": "[parameters('hdinsightClusterZookeeperNodeType')]"
+              },
+              "osProfile": {
+                "linuxOperatingSystemProfile": {
+                  "username": "[parameters('hdinsightClusterHostSshUsername')]",
+                  "password": "[parameters('hdinsightClusterHostSshPassword')]"
+                }
+              },
+              "virtualNetworkProfile": {
+                "id": "[parameters('vnetId')]",
+                "subnet": "[parameters('subnetId')]"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "cluster": {
+      "type": "Object",
+      "value": "[reference(resourceId('Microsoft.HDInsight/clusters',parameters('hdinsightClusterName')))]"
+    }
+  }
+}
