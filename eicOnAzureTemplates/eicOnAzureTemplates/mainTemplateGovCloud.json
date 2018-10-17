@@ -1,0 +1,594 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "defaultValue": "[resourceGroup().location]",
+      "type": "String",
+      "metadata": {
+        "description": "The location where all azure resources will be deployed."
+      }
+    },
+    "informaticaAdministratorUsername": {
+      "type": "string",
+      "defaultValue": "Administrator",
+      "metadata": {
+        "description": "Specify the Informatica Administrator username."
+      }
+    },
+    "informaticaAdministratorPassword": {
+      "type": "SecureString",
+      "metadata": {
+        "description": "Specify the password for the Informatica Administrator username."
+      }
+    },
+    "informaticaLicenseFullPath": {
+      "type": "SecureString",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Provide a valid Informatica Enterpise Data Catalog License key file."
+      }
+    },
+    "informaticaDomainInstanceType": {
+      "defaultValue": "Standard_D4_v2",
+      "type": "String",
+      "metadata": {
+        "description": "The size of Informatica domain instance."
+      }
+    },
+    "allowedIpRange": {
+      "type": "string",
+      "defaultValue": "*",
+      "metadata": {
+        "description": "CIDR IP range that is permitted to access Informatica domain. The default value '*' allows access to all IPs."
+      }
+    },
+    "loadType": {
+      "type": "string",
+      "allowedValues": [
+        "low",
+        "medium",
+        "high",
+        "demo"
+      ],
+      "defaultValue": "default",
+      "metadata": {
+        "description": "Based on the size of the data set, select the size of the cluster required. (i) Default (Standard_D4_v2, two nodes) (ii) Small (Standard_D4_v2, three nodes) (iii) Medium (Standard_D4_v2, five nodes) (iv) High (Standard_D4_v2, seven nodes) "
+      }
+    },
+    "clusterHeadNodeInstanceType": {
+      "defaultValue": "Standard_D4_v2",
+      "type": "String",
+      "metadata": {
+        "description": "The size of cluster head node instance."
+      }
+    },
+    "clusterWorkerNodeInstanceType": {
+      "defaultValue": "Standard_D4_v2",
+      "type": "String",
+      "metadata": {
+        "description": "The size of cluster worker node instance."
+      }
+    },
+    "importSampleData": {
+      "type": "string",
+      "allowedValues": [
+        "true",
+        "false"
+      ],
+      "defaultValue": "true",
+      "metadata": {
+        "description": "Select Yes to import sample catalog data that you can use to get started with the product."
+      }
+    },
+
+
+    "sqlServerUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "Database username to be created for the Informatica domain and services."
+      }
+    },
+    "sqlServerPassword": {
+      "type": "SecureString",
+      "metadata": {
+        "description": "Database user password."
+      }
+    },
+    "storageExistingOrNew": {
+      "type": "string",
+      "allowedValues": [
+        "existing",
+        "new"
+      ],
+      "defaultValue": "new",
+      "metadata": {
+        "description": "Storage new or existing"
+      }
+    },
+    "azureStorageRG": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Existing storage resource group name"
+      }
+    },
+    "azureStorageName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Storage account for cluster and virtual machine."
+      }
+    },
+    "vnetExistingOrNew": {
+      "type": "string",
+      "allowedValues": [
+        "existing",
+        "new"
+      ],
+      "defaultValue": "new",
+      "metadata": {
+        "description": "VNET new or existing"
+      }
+    },
+    "vnetRG": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Existing VNET resource group name"
+      }
+    },
+    "informaticaVirtualNetworkName": {
+      "defaultValue": "infavnet",
+      "type": "String",
+      "metadata": {
+        "description": "Select the existing virtual network based on the subscription and location or create a new virtual network."
+      }
+    },
+    "vnetAddressPrefix": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "VNET address prefix."
+      }
+    },
+    "informaticaSubnetName": {
+      "type": "string",
+      "defaultValue": "infasubnet",
+      "metadata": {
+        "description": "Select the subnets that must include all resources."
+      }
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Subnet address prefix."
+      }
+    },
+    "baseUrl": {
+      "type": "string",
+      "metadata": {
+        "description": "Base URL for Marketplace.",
+        "artifactsBaseUrl": "https://raw.githubusercontent.com/robsharm/gitrepo/master/eicOnAzureTemplates/eicOnAzureTemplates"
+      },
+      "defaultValue": "https://raw.githubusercontent.com/robsharm/gitrepo/master/eicOnAzureTemplates/eicOnAzureTemplates"
+    },
+    "informaticaTags": {
+      "type": "object",
+      "defaultValue": {
+        "provider": "AACF690D-C725-4C78-9B1E-E586595B369F"
+      }
+    }
+  },
+  "variables": {
+    "baseUri": "[concat(parameters('baseUrl'), '/')]",
+
+
+    "hdinsightClusterDeployTemplateUri": "[concat(variables('baseUri'), 'clusterdeploy.json')]",
+    "hdinsightClusterName": "[toLower(concat('infacluster', uniqueString(resourceGroup().id)))]",
+    "hdinsightClusterHostSshUsername": "sshuser",
+    "hdinsightClusterHostSshPassword": "[parameters('informaticaAdministratorPassword')]",
+    "hdinsightClusterType": "hadoop",
+    "clusterWorkerNodeCounts": {
+      "low": "3",
+      "demo": "1",
+      "medium": "5",
+      "high": "7"
+    },
+    "hdinsightClusterWorkerNodeCount": "[variables('clusterWorkerNodeCounts')[parameters('loadType')]]",
+    "hdinsightClusterHeadNodeCount": "2",
+    "hdinsightClusterHeadNodeType": "[parameters('clusterHeadNodeInstanceType')]",
+    "hdinsightClusterWorkerNodeType": "[parameters('clusterWorkerNodeInstanceType')]",
+    "hdinsightClusterZookeeperNodeCount": "3",
+    "hdinsightClusterZookeeperNodeType": "Small",
+    "hdinsightClusterVersion": "3.6",
+    "hdinsightClusterLoginUsername": "admin",
+    "hdinsightClusterLoginPassword": "[parameters('informaticaAdministratorPassword')]",
+
+
+    "informaticaDomainHostName": "[toLower(concat('infadomainnode', uniqueString(resourceGroup().id)))]",
+    "infaDomainNodeDeployTemplateUri": "[concat(variables('baseUri'), 'infadomainnodedeploy.json')]",
+    "informaticaDomainHostSshUsername": "sshuser",
+    "informaticaDomainHostSshPassword": "[parameters('informaticaAdministratorPassword')]",
+    "osVersion": "eicvm",
+    "imagePublisher": "informatica",
+    "imageOffer": "eic-preview",
+
+
+    "informaticaNetworkSecurityGroupName": "[toLower(concat('infansg', uniqueString(resourceGroup().id)))]",
+    "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
+
+    "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
+    "sqlServerName": "[toLower(concat('sqlserver', uniqueString(resourceGroup().id)))]",
+    "mrsDbName": "mrs",
+    "disDbName": "dis",
+    "cmsDbName": "cms",
+    "domainDbName": "domain",
+
+
+    "azureStorageDeployTemplateUri": "[concat(variables('baseuri'), 'storagedeploynew.json')]",
+    "azureStorageType": "Standard_LRS",
+
+
+    "virtualNetworkDeployTemplateUri": "[concat(variables('baseuri'), 'virtualnetworkdeploynew.json')]",
+
+    "informaticaVirtualNetworkAddressPrefix": "[parameters('vnetAddressPrefix')]",
+    "informaticaSubnetAddressPrefix": "[parameters('subnetPrefix')]"
+  },
+
+  "resources": [
+
+
+    {
+      "name": "storageSetup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-05-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('azureStorageDeployTemplateUri')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "azureStorageLocation": {
+            "value": "[parameters('location')]"
+          },
+          "azureStorageName": {
+            "value": "[parameters('azureStorageName')]"
+          },
+          "azureStorageType": {
+            "value": "[variables('azureStorageType')]"
+          },
+          "azureStorageRG": {
+            "value": "[parameters('azureStorageRG')]"
+          },
+          "informaticaTags": {
+            "value": "[parameters('informaticaTags')]"
+          },
+          "storageExistingOrNew": {
+            "value": "[parameters('storageExistingOrNew')]"
+          }
+        }
+      }
+    },
+
+
+
+
+    {
+      "name": "vnetSetup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-05-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('virtualNetworkDeployTemplateUri')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vnetLocation": {
+            "value": "[parameters('location')]"
+          },
+          "informaticaVirtualNetworkName": {
+            "value": "[parameters('informaticaVirtualNetworkName')]"
+          },
+          "informaticaVirtualNetworkAddressPrefix": {
+            "value": "[variables('informaticaVirtualNetworkAddressPrefix')]"
+          },
+          "informaticaSubnetName": {
+            "value": "[parameters('informaticaSubnetName')]"
+          },
+          "informaticaSubnetAddressPrefix": {
+            "value": "[variables('informaticaSubnetAddressPrefix')]"
+          },
+          "vnetRG": {
+            "value": "[parameters('vnetRG')]"
+          },
+          "vnetExistingOrNew": {
+            "value": "[parameters('vnetExistingOrNew')]"
+          },
+          "informaticaTags": {
+            "value": "[parameters('informaticaTags')]"
+          }
+        }
+      }
+    },
+
+
+    {
+      "name": "nsgSetup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-05-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('nsgDeployTemplateUri')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "networkSecurityGroupLocation": {
+            "value": "[parameters('location')]"
+          },
+          "informaticaNetworkSecurityGroupName": {
+            "value": "[variables('informaticaNetworkSecurityGroupName')]"
+          },
+          "allowedIpRange": {
+            "value": "[parameters('allowedIpRange')]"
+          },
+          "informaticaTags": {
+            "value": "[parameters('informaticaTags')]"
+          }
+        }
+      }
+    },
+
+
+
+
+    {
+      "name": "clusterSetup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/storageSetup",
+        "Microsoft.Resources/deployments/vnetSetup"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('hdinsightClusterDeployTemplateUri')]",
+          "contentVersion": "1.0.0.0"
+        },
+
+        "parameters": {
+          "hdinsightClusterVersion": {
+            "value": "[variables('hdinsightClusterVersion')]"
+          },
+          "hdinsightClusterName": {
+            "value": "[variables('hdinsightClusterName')]"
+          },
+          "hdinsightClusterLoginUsername": {
+            "value": "[variables('hdinsightClusterLoginUsername')]"
+          },
+          "hdinsightClusterLoginPassword": {
+            "value": "[variables('hdinsightClusterLoginPassword')]"
+          },
+          "hdinsightClusterHostSshUsername": {
+            "value": "[variables('hdinsightClusterHostSshUsername')]"
+          },
+          "hdinsightClusterHostSshPassword": {
+            "value": "[variables('hdinsightClusterHostSshPassword')]"
+          },
+          "clusterDeployLocation": {
+            "value": "[parameters('location')]"
+          },
+          "hdinsightClusterType": {
+            "value": "[variables('hdinsightClusterType')]"
+          },
+          "hdinsightClusterHeadNodeCount": {
+            "value": "[variables('hdinsightClusterHeadNodeCount')]"
+          },
+          "hdinsightClusterHeadNodeType": {
+            "value": "[variables('hdinsightClusterHeadNodeType')]"
+          },
+          "hdinsightClusterWorkerNodeCount": {
+            "value": "[variables('hdinsightClusterWorkerNodeCount')]"
+          },
+          "hdinsightClusterWorkerNodeType": {
+            "value": "[variables('hdinsightClusterWorkerNodeType')]"
+          },
+          "hdinsightClusterZookeeperNodeCount": {
+            "value": "[variables('hdinsightClusterZookeeperNodeCount')]"
+          },
+          "hdinsightClusterZookeeperNodeType": {
+            "value": "[variables('hdinsightClusterZookeeperNodeType')]"
+          },
+          "azureStorageId": {
+            "value": "[reference('storageSetup').outputs.storageId.value]"
+          },
+          "azureStorageFqdn": {
+            "value": "[reference('storageSetup').outputs.storageFqdn.value]"
+          },
+          "vnetId": {
+            "value": "[reference('vnetSetup').outputs.vnetId.value]"
+          },
+          "subnetId": {
+            "value": "[reference('vnetSetup').outputs.subnetId.value]"
+          },
+          "informaticaTags": {
+            "value": "[parameters('informaticaTags')]"
+          }
+        }
+      }
+    },
+
+
+
+
+    {
+      "name": "dbSetup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('sqlDbDeployUri')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "sqlServerDeployLocation": {
+            "value": "[parameters('location')]"
+          },
+          "sqlDbDeployUri": {
+            "value": "[variables('sqlDbDeployUri')]"
+          },
+          "sqlServerUsername": {
+            "value": "[parameters('sqlServerUsername')]"
+          },
+          "sqlServerName": {
+            "value": "[variables('sqlServerName')]"
+          },
+          "domainDbName": {
+            "value": "[variables('domainDbName')]"
+          },
+          "mrsDbName": {
+            "value": "[variables('mrsDbName')]"
+          },
+          "disDbName": {
+            "value": "[variables('disDbName')]"
+          },
+          "cmsDbName": {
+            "value": "[variables('cmsDbName')]"
+          },
+          "informaticaTags": {
+            "value": "[parameters('informaticaTags')]"
+          }
+        }
+      }
+    },
+
+
+
+    {
+      "name": "infaDomainNodeSetup",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-05-01",
+      "dependsOn": [
+        "Microsoft.Resources/deployments/storageSetup",
+        "Microsoft.Resources/deployments/vnetSetup",
+        "Microsoft.Resources/deployments/clusterSetup",
+        "Microsoft.Resources/deployments/nsgSetup",
+        "Microsoft.Resources/deployments/dbSetup"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('infaDomainNodeDeployTemplateUri')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "infaDomainNodeLocation": {
+            "value": "[parameters('location')]"
+          },
+          "informaticaDomainHostName": {
+            "value": "[variables('informaticaDomainHostName')]"
+          },
+          "informaticaDomainInstanceType": {
+            "value": "[parameters('informaticaDomainInstanceType')]"
+          },
+          "informaticaDomainHostSshUsername": {
+            "value": "[variables('informaticaDomainHostSshUsername')]"
+          },
+          "informaticaDomainHostSshPassword": {
+            "value": "[variables('informaticaDomainHostSshPassword')]"
+          },
+          "subnetId": {
+            "value": "[reference('vnetSetup').outputs.subnetId.value]"
+          },
+          "informaticaNetworkSecurityGroupName": {
+            "value": "[variables('informaticaNetworkSecurityGroupName')]"
+          },
+          "azureStorageFqdn": {
+            "value": "[reference('storageSetup').outputs.storageFqdn.value]"
+          },
+          "informaticaLicenseFullPath": {
+            "value": "[parameters('informaticaLicenseFullPath')]"
+          },
+          "sqlServerUsername": {
+            "value": "[parameters('sqlServerUsername')]"
+          },
+          "sqlServerPassword": {
+            "value": "[parameters('sqlServerPassword')]"
+          },
+          "sqlServerName": {
+            "value": "[reference('dbSetup').outputs.sqlServerFqdn.value]"
+          },
+          "mrsDbName": {
+            "value": "[variables('mrsDbName')]"
+          },
+          "domainDbName": {
+            "value": "[variables('domainDbName')]"
+          },
+          "disDbName": {
+            "value": "[variables('disDbName')]"
+          },
+          "cmsDbName": {
+            "value": "[variables('cmsDbName')]"
+          },
+          "baseUrl": {
+            "value": "[variables('baseUri')]"
+          },
+          "informaticaAdministratorUsername": {
+            "value": "[parameters('informaticaAdministratorUsername')]"
+          },
+          "informaticaAdministratorPassword": {
+            "value": "[parameters('informaticaAdministratorPassword')]"
+          },
+          "hdinsightClusterName": {
+            "value": "[variables('hdinsightClusterName')]"
+          },
+          "hdinsightClusterLoginUsername": {
+            "value": "[variables('hdinsightClusterLoginUsername')]"
+          },
+          "hdinsightClusterLoginPassword": {
+            "value": "[variables('hdinsightClusterLoginPassword')]"
+          },
+          "hdinsightClusterHostLoginUsername": {
+            "value": "[variables('hdinsightClusterHostSshUsername')]"
+          },
+          "hdinsightClusterHostPassword": {
+            "value": "[variables('hdinsightClusterHostSshPassword')]"
+          },
+          "loadType": {
+            "value": "[parameters('loadType')]"
+          },
+          "importSampleData": {
+            "value": "[parameters('importSampleData')]"
+          },
+          "osVersion": {
+            "value": "[variables('osVersion')]"
+          },
+          "imagePublisher": {
+            "value": "[variables('imagePublisher')]"
+          },
+          "imageOffer": {
+            "value": "[variables('imageOffer')]"
+          },
+          "informaticaTags": {
+            "value": "[parameters('informaticaTags')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
