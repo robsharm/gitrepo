@@ -95,7 +95,7 @@
   },
   "variables": {
     "index": 0,
-    "launchServicesScriptUri": "[concat(parameters('baseUrl'),'launchServices.sh')]",
+    "launchServicesScriptUri": "[concat(parameters('baseUrl'),'launchServicesGovCloud.sh')]",
     "nodeDNSName": "[toLower(concat(parameters('informaticaDomainHostName'), uniqueString(resourceGroup().id)))]",
     "nodeNicName": "[concat(parameters('informaticaDomainHostName'),'Nic')]"
   },
