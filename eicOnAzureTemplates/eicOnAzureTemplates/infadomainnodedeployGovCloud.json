@@ -1,0 +1,242 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "infaDomainNodeLocation": {
+      "type": "String"
+    },
+    "informaticaDomainHostName": {
+      "type": "String"
+    },
+    "informaticaDomainInstanceType": {
+      "type": "String"
+    },
+    "informaticaDomainHostSshUsername": {
+      "type": "String"
+    },
+    "informaticaDomainHostSshPassword": {
+      "type": "SecureString"
+    },
+    "subnetId": {
+      "type": "String"
+    },
+    "informaticaNetworkSecurityGroupName": {
+      "type": "String"
+    },
+    "azureStorageFqdn": {
+      "type": "String"
+    },
+    "informaticaLicenseFullPath": {
+      "type": "SecureString"
+    },
+    "sqlServerUsername": {
+      "type": "String"
+    },
+    "sqlServerPassword": {
+      "type": "String"
+    },
+    "sqlServerName": {
+      "type": "String"
+    },
+    "mrsDbName": {
+      "type": "String"
+    },
+    "domainDbName": {
+      "type": "String"
+    },
+    "disDbName": {
+      "type": "String"
+    },
+    "cmsDbName": {
+      "type": "String"
+    },
+    "baseUrl": {
+      "type": "String"
+    },
+    "informaticaAdministratorUsername": {
+      "type": "String"
+    },
+    "informaticaAdministratorPassword": {
+      "type": "String"
+    },
+    "hdinsightClusterName": {
+      "type": "String"
+    },
+    "hdinsightClusterLoginUsername": {
+      "type": "String"
+    },
+    "hdinsightClusterLoginPassword": {
+      "type": "String"
+    },
+    "hdinsightClusterHostLoginUsername": {
+      "type": "String"
+    },
+    "hdinsightClusterHostPassword": {
+      "type": "String"
+    },
+    "loadType": {
+      "type": "String"
+    },
+    "importSampleData": {
+      "type": "String"
+    },
+    "osVersion": {
+      "type": "String"
+    },
+    "imagePublisher": {
+      "type": "String"
+    },
+    "imageOffer": {
+      "type": "String"
+    },
+    "informaticaTags": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "index": 0,
+    "launchServicesScriptUri": "[concat(parameters('baseUrl'),'launchServices.sh')]",
+    "nodeDNSName": "[toLower(concat(parameters('informaticaDomainHostName'), uniqueString(resourceGroup().id)))]",
+    "nodeNicName": "[concat(parameters('informaticaDomainHostName'),'Nic')]"
+  },
+  "resources": [
+    {
+      "name": "[variables('nodeDNSName')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "location": "[parameters('infaDomainNodeLocation')]",
+      "apiVersion": "2018-06-01",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "publicip",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[variables('nodeDNSName')]"
+        }
+      }
+    },
+    {
+      "name": "[variables('nodeNicName')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[parameters('infaDomainNodeLocation')]",
+      "apiVersion": "2018-06-01",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]"
+      ],
+      "tags": {
+        "displayName": "niccard",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[parameters('subnetId')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('nodeDNSName'))]"
+              }
+            }
+          }
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('informaticaNetworkSecurityGroupName'))]"
+        }
+      }
+    },
+    {
+      "name": "[parameters('informaticaDomainHostName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[parameters('infaDomainNodeLocation')]",
+      "tags": {
+        "displayName": "nodevm",
+        "provider": "[toUpper(parameters('informaticaTags').provider)]"
+      },
+      "apiVersion": "2018-06-01",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('nodeDNSName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nodeNicName'))]"
+      ],
+      "plan": {
+        "name": "[parameters('osVersion')]",
+        "publisher": "[parameters('imagePublisher')]",
+        "product": "[parameters('imageOffer')]"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('informaticaDomainInstanceType')]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('informaticaDomainHostName')]",
+          "adminUsername": "[parameters('informaticaDomainHostSshUsername')]",
+          "adminPassword": "[parameters('informaticaDomainHostSshPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('osVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "InfaOSDisk",
+            "caching": "ReadWrite",
+            "createOption": "FromImage",
+            "vhd": {
+              "uri": "[concat(parameters('azureStorageFqdn'), 'vhds/', parameters('informaticaDomainHostName'),uniquestring(resourceGroup().id), '.osdisk.vhd')]"
+            }
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nodeNicName'))]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "scriptExtension",
+          "type": "extensions",
+          "location": "[parameters('infaDomainNodeLocation')]",
+          "apiVersion": "2018-06-01",
+          "tags": {
+            "displayName": "vmscriptext",
+            "provider": "[toUpper(parameters('informaticaTags').provider)]"
+          },
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('informaticaDomainHostName'))]"
+          ],
+
+          "properties": {
+            "publisher": "Microsoft.Azure.Extensions",
+            "type": "CustomScript",
+            "typeHandlerVersion": "2.0",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": [
+                "[variables('launchServicesScriptUri')]"
+              ]
+            },
+            "protectedSettings": {
+              "commandToExecute": "[concat('./launchServicesGovCloud.sh ',' \"',parameters('informaticaLicenseFullPath'),'\" ',parameters('sqlServerUsername'),' \"',parameters('sqlServerPassword'),'\" ',parameters('sqlServerName'),' ',parameters('informaticaAdministratorUsername'),' \"',parameters('informaticaAdministratorPassword'),'\" ',parameters('domainDbName'),' ',parameters('mrsDbName'),' ',parameters('disDbName'),' ',parameters('cmsDbName'),' ',parameters('loadType'),' ',parameters('importSampleData'),' ',parameters('hdinsightClusterName'),' ',parameters('hdinsightClusterLoginUsername'),' \"',parameters('hdinsightClusterLoginPassword'),'\" ',parameters('hdinsightClusterHostLoginUsername'),' \"',parameters('hdinsightClusterHostPassword'),'\"')]"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "fqdn": {
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', variables('nodeDNSName')), '2016-10-01').dnsSettings.fqdn]",
+      "type": "string"
+    }
+
+  }
+}
