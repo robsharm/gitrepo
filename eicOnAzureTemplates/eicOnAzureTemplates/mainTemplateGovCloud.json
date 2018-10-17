@@ -185,7 +185,7 @@
     "baseUri": "[concat(parameters('baseUrl'), '/')]",
 
 
-    "hdinsightClusterDeployTemplateUri": "[concat(variables('baseUri'), 'clusterdeploy.json')]",
+    "hdinsightClusterDeployTemplateUri": "[concat(variables('baseUri'), 'clusterdeployGovCloud.json')]",
     "hdinsightClusterName": "[toLower(concat('infacluster', uniqueString(resourceGroup().id)))]",
     "hdinsightClusterHostSshUsername": "sshuser",
     "hdinsightClusterHostSshPassword": "[parameters('informaticaAdministratorPassword')]",
@@ -219,7 +219,7 @@
     "informaticaNetworkSecurityGroupName": "[toLower(concat('infansg', uniqueString(resourceGroup().id)))]",
     "nsgDeployTemplateUri": "[concat(variables('baseUri'), 'networksecuritygroupdeploy.json')]",
 
-    "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeploy.json')]",
+    "sqlDbDeployUri": "[concat(variables('baseUri'), 'sqldatabasedeployGovCloud.json')]",
     "sqlServerName": "[toLower(concat('sqlserver', uniqueString(resourceGroup().id)))]",
     "mrsDbName": "mrs",
     "disDbName": "dis",
